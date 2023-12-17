@@ -1,6 +1,6 @@
 # adishankara_calender
 
-A new Flutter project.
+A  Flutter  Calender project.
 
 ## Getting Started
 
