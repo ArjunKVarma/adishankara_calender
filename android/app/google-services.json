@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "497965163960",
+    "project_id": "adishnakara-calender",
+    "storage_bucket": "adishnakara-calender.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497965163960:android:90d5754d2d6372e41c1b4d",
+        "android_client_info": {
+          "package_name": "com.example.adishankara_calender"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXaZTQQlNPh6Fr19uP6KGC4bzb0vLlYo0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

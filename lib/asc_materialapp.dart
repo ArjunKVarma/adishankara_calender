@@ -1,72 +1,65 @@
+import 'package:adishankara_calender/calender_widget.dart';
+import 'package:adishankara_calender/pages/signup_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class AscMaterialApp extends StatelessWidget {
   const AscMaterialApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData.dark(),
-      child: Scaffold(
-        backgroundColor: const Color.fromRGBO(5, 89, 163, 1),
-        appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            actions: <Widget>[
-              IconButton(
-                icon: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                      "https://img.freepik.com/premium-vector/symbol-male-user-icon-circle-profile-icon-vector-illustration_276184-154.jpg?w=2000"),
-                ),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Hey Name"),
-                    ),
-                  );
-                },
-              ),
-            ]),
-        drawer: Drawer(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[drawerelement(context)],
-            ),
+    return ZoomDrawer(
+      menuBackgroundColor: Colors.blue,
+      angle: -5.0,
+      slideWidth: MediaQuery.of(context).size.width / 1.7,
+      moveMenuScreen: true,
+      mainScreen: const MainScreen(),
+      menuScreen: const DrawerElement(),
+    );
+  }
+}
+
+class DrawerElement extends StatelessWidget {
+  const DrawerElement({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blue,
+      body: Column(
+        children: [
+          const ListTile(
+            title: Text("Hello"),
           ),
-        ),
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 2,
-              child: SfCalendar(
-                view: CalendarView.month,
-                showDatePickerButton: true,
-                allowViewNavigation: false,
-                headerStyle: const CalendarHeaderStyle(
-                  textAlign: TextAlign.center,
-                  textStyle:
-                      TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-                headerHeight: 50,
-              ),
+          FloatingActionButton(
+            child: const Icon(
+              Icons.logout,
+              color: Colors.white,
             ),
-          ],
-        ),
+            onPressed: () {
+              _auth.signOut();
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SignUpScreen(),
+                  ));
+            },
+          ),
+        ],
       ),
     );
   }
+}
 
-  Widget drawerelement(BuildContext context) {
-    return const Column(
-      children: [
-        ListTile(
-          title: Text("Hello"),
-        )
-      ],
+class ToggleWidget extends StatelessWidget {
+  const ToggleWidget({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.menu),
+      onPressed: () => ZoomDrawer.of(context)!.toggle(),
     );
   }
 }
