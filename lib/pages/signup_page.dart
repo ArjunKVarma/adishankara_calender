@@ -1,3 +1,4 @@
+import 'package:adishankara_calender/dependencies/Firebaseservices.dart';
 import 'package:adishankara_calender/pages/signin_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -10,7 +11,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseServices _auth = FirebaseServices();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _obscurePassword = true;
@@ -28,23 +29,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String _user = "";
   String _email = "";
   String _password = "";
+  bool _signing = false;
 
   void _handlesignup() async {
+    _user = _userController.text;
+    _email = _emailController.text;
+    _password = _confpassController.text;
     if (kDebugMode) {
       print("formkey to be registered");
     }
-    try {
-      UserCredential userCredential = await _auth
-          .createUserWithEmailAndPassword(email: _email, password: _password);
+    setState(() {
+      _signing = true;
+    });
+    final navigator = Navigator.of(context);
+    User? user = await _auth.signUpwithEmailAndPassword(_email, _password);
+
+    if (user != null) {
+      navigator.pushReplacement(
+        MaterialPageRoute(
+          builder: (context) {
+            return const SignIn();
+          },
+        ),
+      );
+    } else {
       if (kDebugMode) {
-        print("registered user $userCredential");
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print("not registered");
-        return null;
+        print("Something went Wrong");
       }
     }
+    setState(() {
+      _signing = false;
+    });
   }
 
   @override
@@ -209,9 +224,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        _user = _userController.text;
-                        _email = _emailController.text;
-                        _password = _confpassController.text;
                         _handlesignup();
                       } else {
                         if (kDebugMode) {
@@ -226,12 +238,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             behavior: SnackBarBehavior.floating,
-                            content: const Text("Registered unSuccessfully"),
+                            content: const Text("Check email or password"),
                           ),
                         );
                       }
                     },
-                    child: const Text("Register"),
+                    child: _signing
+                        ? const CircularProgressIndicator(
+                            color: Colors.black38,
+                          )
+                        : const Text("Register"),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

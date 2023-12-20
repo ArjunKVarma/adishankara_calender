@@ -1,4 +1,5 @@
 import 'package:adishankara_calender/asc_materialapp.dart';
+import 'package:adishankara_calender/dependencies/Firebaseservices.dart';
 import 'package:adishankara_calender/pages/signup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -14,8 +15,8 @@ class SignIn extends StatefulWidget {
 }
 
 class SignInState extends State<SignIn> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final FirebaseServices _auth = FirebaseServices();
 
   bool _obscurePassword = true;
 
@@ -36,34 +37,21 @@ class SignInState extends State<SignIn> {
     setState(() {
       _signing = true;
     });
-    try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-          email: _email, password: _password);
-      if (kDebugMode) {
-        print("Logged_in user $userCredential");
-      }
-      Navigator.pushReplacement(
-        context,
+    _email = _emailController.text;
+    _password = _passController.text;
+    final navigator = Navigator.of(context);
+    User? user = await _auth.signinpwithEmailAndPassword(_email, _password);
+    if (user != null) {
+      navigator.pushReplacement(
         MaterialPageRoute(
           builder: (context) {
             return const AscMaterialApp();
           },
         ),
       );
-    } catch (e) {
+    } else {
       if (kDebugMode) {
-        print("not registered");
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            width: 200,
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            behavior: SnackBarBehavior.floating,
-            content: const Text("Registered unSuccessfully"),
-          ),
-        );
+        print("Something went Wrong");
       }
     }
     setState(() {
@@ -172,8 +160,6 @@ class SignInState extends State<SignIn> {
                       ),
                       onPressed: () {
                         if (_formKey.currentState?.validate() ?? false) {
-                          _email = _emailController.text;
-                          _password = _passController.text;
                           _handlesignin();
                         }
                       },

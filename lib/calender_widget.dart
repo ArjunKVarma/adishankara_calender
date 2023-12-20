@@ -4,7 +4,6 @@ import 'package:adishankara_calender/models/meeting_model.dart';
 import 'package:adishankara_calender/providers/event_provider.dart';
 import 'package:adishankara_calender/taskwidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -19,15 +18,11 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final panelController = PanelController();
-  Widget _selectedWidget = taskWidget();
+  Widget _selectedWidget = const taskWidget();
 
   @override
   Widget build(BuildContext context) {
     final events = Provider.of<EventProvider>(context).events;
-    if (kDebugMode) {
-      print("Cal" + events.toString());
-    }
     String? user = _auth.currentUser!.email;
     return Theme(
       data: ThemeData.dark(),
@@ -56,7 +51,6 @@ class _MainScreenState extends State<MainScreen> {
         body: SlidingUpPanel(
           color: Colors.transparent,
           minHeight: MediaQuery.of(context).size.height / 3,
-          controller: panelController,
           panelBuilder: (scrollController) =>
               sliderbuild(scrollController: scrollController),
           body: SingleChildScrollView(
@@ -64,7 +58,7 @@ class _MainScreenState extends State<MainScreen> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height,
+                  height: MediaQuery.of(context).size.height / 2,
                   child: SfCalendar(
                     view: CalendarView.month,
                     dataSource: EventdataSource(events),
@@ -80,18 +74,14 @@ class _MainScreenState extends State<MainScreen> {
                       final provider =
                           Provider.of<EventProvider>(context, listen: false);
                       provider.setDate(details.date!);
-
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) => const taskWidget(),
-                      );
                     },
                     onTap: (details) {
                       final provider =
                           Provider.of<EventProvider>(context, listen: false);
                       provider.setDate(details.date!);
                       setState(() {
-                        _selectedWidget = const taskWidget();
+                        // ignore: prefer_const_constructors
+                        _selectedWidget = taskWidget();
                       });
                     },
                   ),

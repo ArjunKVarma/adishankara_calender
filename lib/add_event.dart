@@ -2,7 +2,7 @@ import 'package:adishankara_calender/models/meeting_model.dart';
 import 'package:adishankara_calender/providers/event_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +20,7 @@ class AddEvent extends StatefulWidget {
 class _AddEventState extends State<AddEvent> {
   final _formkey = GlobalKey<FormState>();
   final titleController = TextEditingController();
+  final descController = TextEditingController();
   late DateTime fromDate;
   late DateTime toDate;
   @override
@@ -27,7 +28,7 @@ class _AddEventState extends State<AddEvent> {
     super.initState();
     if (widget.event == null) {
       fromDate = DateTime.now();
-      toDate = DateTime.now().add(Duration(hours: 2));
+      toDate = DateTime.now().add(const Duration(hours: 2));
     }
   }
 
@@ -50,7 +51,7 @@ class _AddEventState extends State<AddEvent> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         child: Form(
             key: _formkey,
             child: Column(
@@ -59,6 +60,8 @@ class _AddEventState extends State<AddEvent> {
                 buildTitle(),
                 const SizedBox(height: 12),
                 buildDateTimePickers(),
+                const SizedBox(height: 12),
+                buildDesc(),
               ],
             )),
       ));
@@ -72,6 +75,17 @@ class _AddEventState extends State<AddEvent> {
       validator: (title) =>
           title != null && title.isEmpty ? "Title cannot be empty" : null,
       controller: titleController,
+    );
+  }
+
+  buildDesc() {
+    return TextFormField(
+      style: const TextStyle(fontSize: 24),
+      decoration: const InputDecoration(
+          border: UnderlineInputBorder(), hintText: "Add Description"),
+      onFieldSubmitted: (_) {},
+      controller: descController,
+      maxLines: 3,
     );
   }
 
@@ -115,14 +129,20 @@ class _AddEventState extends State<AddEvent> {
 
   Future savevent() async {
     final isValid = _formkey.currentState!.validate();
+    Color colorARGB = Color.fromARGB(
+      255,
+      math.Random().nextInt(200),
+      math.Random().nextInt(200),
+      math.Random().nextInt(200),
+    );
 
     if (isValid) {
       final event = Event(
           eventName: titleController.text,
-          eventdesc: "Description",
+          eventdesc: descController.text,
           from: fromDate,
           to: toDate,
-          background: const Color.fromRGBO(23, 22, 21, 20),
+          background: colorARGB,
           isAllDay: false);
 
       final provider = Provider.of<EventProvider>(context, listen: false);
@@ -196,7 +216,7 @@ class _AddEventState extends State<AddEvent> {
       if (timeOfDay == null) return null;
       final date = DateTime(initDate.year, initDate.month, initDate.day);
 
-      final time = Duration(hours: initDate.hour, minutes: initDate.minute);
+      final time = Duration(hours: timeOfDay.hour, minutes: timeOfDay.minute);
 
       return date.add(time);
     }

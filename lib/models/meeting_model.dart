@@ -17,6 +17,6 @@ class Event {
 
   @override
   String toString() {
-    return '{name: $eventName}, {fron: $from} , {to: $to}, {d: $isAllDay} ';
+    return '{name: $eventName}, {fron: $from} , {to: $to}, {d: $isAllDay} {co: $background}';
   }
 }
