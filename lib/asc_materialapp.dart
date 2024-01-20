@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:getwidget/components/list_tile/gf_list_tile.dart';
+import 'package:getwidget/getwidget.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -31,44 +32,77 @@ class DrawerElement extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.blue,
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: ListView(
+          padding:
+              EdgeInsets.only(top: MediaQuery.of(context).size.height / 3.2),
           children: [
-            GFListTile(
-              color: Colors.white70,
-              shadow: const BoxShadow(
-                color: Color.fromARGB(167, 255, 255, 255),
+            // A GfListTile with a title, a subtitle, and an icon
+
+            // A GfListTile with an avatar, a title, a subtitle, and a color
+            const GFListTile(
+              shadow: BoxShadow(
+                color: Color.fromARGB(30, 255, 255, 255),
                 offset: Offset.zero,
                 blurRadius: 0.0,
                 spreadRadius: 0.0,
               ),
-              title: const Text(
-                "Logged in as ",
-                style: TextStyle(
-                    color: Color.fromARGB(153, 27, 26, 26), fontSize: 20),
-              ),
-              subTitle: Text("$user"),
+              margin: EdgeInsets.all(5),
+              radius: 0,
+              title: Text('Daily feed'),
+              subTitle: Text('under development'),
+              color: Color.fromARGB(33, 255, 255, 255),
             ),
-            SizedBox(
-              width: 200,
-              child: ElevatedButton(
-                onPressed: () {
-                  _auth.signOut();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignUpScreen(),
-                      ));
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                child: const Text("Log Out"),
+            // A GfListTile with a title, a subtitle, an icon, and a shape
+            const GFListTile(
+              shadow: BoxShadow(
+                color: Color.fromARGB(30, 255, 255, 255),
+                offset: Offset.zero,
+                blurRadius: 0.0,
+                spreadRadius: 0.0,
               ),
+              margin: EdgeInsets.all(5),
+              radius: 0,
+              title: Text('Profile'),
+              subTitle: Text('under development'),
+              icon: Icon(Icons.arrow_forward_ios),
+              color: Color.fromARGB(33, 255, 255, 255),
+            ),
+            // A GfListTile with a title, a subtitle, an icon, and an onTap callback
+            GFListTile(
+              shadow: BoxShadow(
+                color: Color.fromARGB(30, 255, 255, 255),
+                offset: Offset.zero,
+                blurRadius: 0.0,
+                spreadRadius: 0.0,
+              ),
+              margin: EdgeInsets.all(5),
+              radius: 0,
+              title: Text('Settings'),
+              subTitle: Text('under development'),
+              icon: Icon(Icons.arrow_forward_ios),
+              color: Color.fromARGB(33, 255, 255, 255),
+            ),
+            GFListTile(
+              shadow: BoxShadow(
+                color: Color.fromARGB(30, 255, 255, 255),
+                offset: Offset.zero,
+                blurRadius: 0.0,
+                spreadRadius: 0.0,
+              ),
+              title: Text('Signed in as'),
+              subTitle: Text(user!),
+              onLongPress: () {
+                _auth.signOut();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SignUpScreen(),
+                    ));
+              },
+              margin: EdgeInsets.all(5),
+              radius: 0,
+              icon: Icon(Icons.logout),
+              color: Color.fromARGB(33, 255, 255, 255),
             ),
           ],
         ),

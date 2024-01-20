@@ -1,5 +1,7 @@
+import 'package:adishankara_calender/models/meeting_model.dart';
 import 'package:adishankara_calender/pages/viewevent.dart';
 import 'package:adishankara_calender/providers/event_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -23,6 +25,8 @@ class _taskWidgetState extends State<taskWidget> {
     final selectedEvents = provider.eventsOnselectedDate;
 
     var date = provider.selectedDate;
+    // var date1 = date.toLocal().toString().split(' ')[0];
+    // DateTime select_date = new DateFormat("yyyy-MM-dd").parse(date1);
     var formattedDate = DateFormat.yMMMd().format(date);
     final filtered1 = selectedEvents
         .where((e) => DateFormat.yMMMd().format(e.from) == formattedDate)
@@ -30,10 +34,23 @@ class _taskWidgetState extends State<taskWidget> {
 
     if (kDebugMode) {
       print("date onlt: $formattedDate");
-      print("Calender: $selectedEvents");
+      print("Calender: $date");
       print("CAlender debug: $filtered1");
     }
 
+    // code for retriving firestore data
+    Stream<List<Event>> eventsStream = FirebaseFirestore.instance
+        .collection('events')
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => Event.fromJson(doc.data()))
+          .toList();
+    });
+
+    //stream state
+
+    //end of code
     if (filtered1.isEmpty) {
       return Container(
         color: Colors.transparent,
@@ -87,58 +104,77 @@ class _taskWidgetState extends State<taskWidget> {
         body: Scaffold(
             backgroundColor: const Color.fromARGB(255, 236, 245, 253),
             body: Padding(
-              padding: const EdgeInsets.all(8),
-              child: ListView.builder(
-                itemCount: filtered1.length,
-                itemBuilder: (BuildContext context, index) {
-                  final datereq = filtered1[index].from;
-                  final dateto = filtered1[index].to;
-                  var toTime = DateFormat.H().format(dateto);
-                  var fromTime = DateFormat.H().format(datereq);
-                  return GFListTile(
-                      shadow: const BoxShadow(
-                        color: Color.fromARGB(167, 255, 255, 255),
-                        offset: Offset.zero,
-                        blurRadius: 0.0,
-                        spreadRadius: 0.0,
-                      ),
-                      title: Text(
-                        filtered1[index].eventName,
-                        style: const TextStyle(
-                            color: Colors.white60, fontSize: 20),
-                      ),
-                      onTap: () {
-                        final event = selectedEvents
-                            .where((e) =>
-                                DateFormat.yMMMd().format(e.from) ==
-                                formattedDate)
-                            .toList();
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ViewEvent(event: event),
-                          ),
-                        );
-                      },
-                      subTitle: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            filtered1[index].eventdesc,
-                            style: const TextStyle(color: Colors.white60),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(3),
-                            child: Text(
-                              "$fromTime - $toTime",
-                              style: const TextStyle(color: Colors.white60),
-                            ),
-                          )
-                        ],
-                      ),
-                      color: filtered1[index].background);
-                },
-              ),
-            )),
+                padding: const EdgeInsets.all(8),
+                child: StreamBuilder<List<Event>>(
+                  stream: eventsStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      List<Event> events = snapshot.data!;
+                      return ListView.builder(
+                        itemCount: events.length,
+                        itemBuilder: (context, index) {
+                          Event event = events[index];
+                          if (event.from.isAfter(date)) {
+                            print("The event is ${event.eventName}");
+                            return GFListTile(
+                                shadow: const BoxShadow(
+                                  color: Color.fromARGB(167, 255, 255, 255),
+                                  offset: Offset.zero,
+                                  blurRadius: 0.0,
+                                  spreadRadius: 0.0,
+                                ),
+                                title: Text(
+                                  filtered1[index].eventName,
+                                  style: const TextStyle(
+                                      color: Colors.white60, fontSize: 20),
+                                ),
+                                onTap: () {
+                                  final event = selectedEvents
+                                      .where((e) =>
+                                          DateFormat.yMMMd().format(e.from) ==
+                                          formattedDate)
+                                      .toList();
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ViewEvent(event: event),
+                                    ),
+                                  );
+                                },
+                                subTitle: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      filtered1[index].eventdesc,
+                                      style: const TextStyle(
+                                          color: Colors.white60),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(3),
+                                      child: Text(
+                                        "${event.from} to ${event.to}",
+                                        style: const TextStyle(
+                                            color: Colors.white60),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                color: filtered1[index].background);
+                          }
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ))),
       ),
     );
   }

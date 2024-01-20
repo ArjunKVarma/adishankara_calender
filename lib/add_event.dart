@@ -1,10 +1,12 @@
 import 'package:adishankara_calender/models/meeting_model.dart';
 import 'package:adishankara_calender/providers/event_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
 
 class AddEvent extends StatefulWidget {
   final Event? event;
@@ -147,6 +149,18 @@ class _AddEventState extends State<AddEvent> {
 
       final provider = Provider.of<EventProvider>(context, listen: false);
       provider.addEvent(event);
+
+      //code block for adding event to firebase
+      // final eventData = jsonEncode(event) as Map<String, dynamic>;
+      // FirebaseFirestore.instance.collection('events').add(eventData);
+      Map<String, dynamic> eventData = event.toJson();
+      FirebaseFirestore.instance
+          .collection('events')
+          .add(eventData)
+          .then((docRef) {
+        print('Event added with ID: ${docRef.id}');
+      });
+      // End of adding event to firebase
 
       Navigator.of(context).pop();
       if (kDebugMode) {

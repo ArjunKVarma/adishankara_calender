@@ -19,4 +19,28 @@ class Event {
   String toString() {
     return '{name: $eventName}, {fron: $from} , {to: $to}, {d: $isAllDay} {co: $background}';
   }
+
+  //json conversion for event for usecases
+  Map<String, dynamic> toJson() {
+    return {
+      'eventName': eventName,
+      'eventdesc': eventdesc,
+      'from': from.toIso8601String(),
+      'to': to.toIso8601String(),
+      'background': background.value,
+      'isAllDay': isAllDay,
+    };
+  }
+
+  //json retrive code
+  factory Event.fromJson(Map<String, dynamic> json) {
+    return Event(
+      eventName: json['eventName'],
+      eventdesc: json['eventdesc'],
+      from: DateTime.parse(json['from']),
+      to: DateTime.parse(json['to']),
+      background: Color(json['background']),
+      isAllDay: json['isAllDay'],
+    );
+  }
 }
