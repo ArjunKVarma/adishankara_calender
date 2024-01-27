@@ -1,16 +1,34 @@
-# adishankara_calender
 
-A  Flutter  Calender project.
 
-## Getting Started
+### Flutter Calendar App
 
-This project is a starting point for a Flutter application.
+This Flutter calendar app is designed to help users manage their events and appointments efficiently. It provides a user-friendly interface and a range of features to enhance the calendar experience. The app is built using Flutter, a popular cross-platform framework for developing mobile applications.
+# Note: This app is still in Developmen
 
-A few resources to get you started if this is your first Flutter project:
+## Repositories Used
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+To create this Flutter calendar app, the following repositories were utilized:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<ul>
+  
+<li>Syncfunction-calender: This repository provides a quick-start project that helps you add the Syncfusion Flutter Event Calendar widget to a Flutter app. It offers features like changing the calendar view, adding events, and managing event details.
+<link>https://pub.dev/packages/syncfusion_flutter_calendar</link></li>
+
+<li>Flutter Zoom-drawer : <link>https://pub.dev/packages/flutter_zoom_drawer</link></li>
+
+<li>Provider state manager : <link>https://pub.dev/packages/provider</link>
+Screenshots</li>
+
+
+</ul>
+
+This project uses firebase to handle its backend
+## Here are some screenshots of the Flutter calendar app:
+
+Screenshot 1
+Screenshot 2
+Screenshot 3
+
+These screenshots showcase the app's intuitive design, event management features, and overall user experience.
+
+Feel free to explore these repositories and customize the Flutter calendar app according to your specific requirements. Happy coding!
