@@ -27,9 +27,9 @@ Credits to @sjt8 for the login and signup screens
 This project uses firebase to handle its backend
 ## Here are some screenshots of the Flutter calendar app:
 
-<img src="/images/mainscreen.jpg" width=200 height=300>
-<img src="/images/Addevent.jpg" width=200 height=300>
-<img src="/images/Viewevent.jpg" width=200 height=300>
+<img src="/images/mainscreen.jpg" width=200 height=350>
+<img src="/images/Addevent.jpg" width=200 height=350>
+<img src="/images/Viewevent.jpg" width=200 height=350>
 
 
 These screenshots showcase the app's intuitive design, event management features, and overall user experience.
