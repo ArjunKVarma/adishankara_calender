@@ -6,7 +6,7 @@ class EventProvider extends ChangeNotifier {
   final List<Event> _events = [];
 
   List<Event> get events => _events;
-
+  // Chenges the variable selected date to the date selected on calender
   DateTime _selectedDate = DateTime.now();
 
   DateTime get selectedDate => _selectedDate;

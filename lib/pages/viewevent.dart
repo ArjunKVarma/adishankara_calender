@@ -17,15 +17,15 @@ class ViewEvent extends StatelessWidget {
     final datereqt = evt[0].to;
     final desc = evt[0].eventdesc;
     final sad = evt[0].background;
-    final date;
-    var formatted_fromDate = DateFormat.yMMMd().format(datereqf);
-    var formatted_toDate = DateFormat.yMMMd().format(datereqt);
+    final String date;
+    var formattedFromdate = DateFormat.yMMMd().format(datereqf);
+    var formattedTodate = DateFormat.yMMMd().format(datereqt);
     var toTime = DateFormat.H().format(datereqt);
     var fromTime = DateFormat.H().format(datereqf);
-    if (formatted_toDate == formatted_fromDate) {
-      date = formatted_fromDate;
+    if (formattedTodate == formattedFromdate) {
+      date = formattedFromdate;
     } else {
-      date = "$formatted_fromDate - $formatted_toDate";
+      date = "$formattedFromdate - $formattedTodate";
     }
     return Scaffold(
         backgroundColor: sad,

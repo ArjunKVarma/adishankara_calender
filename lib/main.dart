@@ -4,7 +4,6 @@ import 'package:adishankara_calender/pages/signin_page.dart';
 import 'package:adishankara_calender/providers/event_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,17 +25,18 @@ class MyApp extends StatelessWidget {
   // Notifier provider for
   Widget build(BuildContext context) => ChangeNotifierProvider(
         create: (context) => EventProvider(),
+
+        // Use stream builder to render app
         child: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
-            if (kDebugMode) {
-              print(snapshot);
-            }
+            // loading screen
             if (ConnectionState.waiting == snapshot.connectionState) {
               return const Center(
                 child: CircularProgressIndicator.adaptive(),
               );
             }
+            // check for existing snapshot to render signin or app page
             if (snapshot.hasData) {
               return MaterialApp(
                 navigatorKey: NavigationService.navigatorKey,
@@ -52,6 +52,7 @@ class MyApp extends StatelessWidget {
                 title: title,
               );
             }
+            // end of snapshot block
           },
         ),
       );

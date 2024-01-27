@@ -15,21 +15,21 @@ class SignIn extends StatefulWidget {
 }
 
 class SignInState extends State<SignIn> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FirebaseServices _auth = FirebaseServices();
 
-  bool _obscurePassword = true;
-
+  // Requirements for form ------------------------------------------------------------------------------------------
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final FocusNode _focusNodeEmail = FocusNode();
   final FocusNode _focusNodePassword = FocusNode();
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
-
   String _email = "";
   String _password = "";
+  bool _obscurePassword = true;
   bool _signing = false;
+  // End requirements for form -------------------------------------------------------------------------------------
 
+  // Signin function called when signin button is pressed---------------------------------------------------------------
   void _handlesignin() async {
     if (kDebugMode) {
       print("formkey to be registered");
@@ -58,6 +58,7 @@ class SignInState extends State<SignIn> {
       _signing = false;
     });
   }
+  //End of signHandling function--------------------------------------------------------------------------------------
 
   @override
   void dispose() {
@@ -160,6 +161,7 @@ class SignInState extends State<SignIn> {
                       ),
                       onPressed: () {
                         if (_formKey.currentState?.validate() ?? false) {
+                          // calls signHandling function
                           _handlesignin();
                         }
                       },

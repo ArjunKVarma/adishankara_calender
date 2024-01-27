@@ -22,7 +22,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Calls the Events from the state manager --------------
     final events = Provider.of<EventProvider>(context).events;
+    // Selects current users email using auth library
     String? user = _auth.currentUser!.email;
     return Theme(
       data: ThemeData.dark(),
@@ -42,12 +44,15 @@ class _MainScreenState extends State<MainScreen> {
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
+                      // Display username when icon is pressed
                       content: Text("Hey $user"),
                     ),
                   );
                 },
               ),
             ]),
+
+        // The sliderpanel library is used to ccreate a sliding up panel in home screen
         body: SlidingUpPanel(
           color: Colors.transparent,
           minHeight: MediaQuery.of(context).size.height / 3,
@@ -59,8 +64,10 @@ class _MainScreenState extends State<MainScreen> {
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 2,
+                  // Function for Syncfunction  Calender
                   child: SfCalendar(
                     view: CalendarView.month,
+                    // Datasurce is selected
                     dataSource: EventdataSource(events),
                     showDatePickerButton: true,
                     allowViewNavigation: false,
@@ -70,15 +77,12 @@ class _MainScreenState extends State<MainScreen> {
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                     headerHeight: 50,
-                    onLongPress: (details) {
-                      final provider =
-                          Provider.of<EventProvider>(context, listen: false);
-                      provider.setDate(details.date!);
-                    },
                     onTap: (details) {
                       final provider =
                           Provider.of<EventProvider>(context, listen: false);
                       provider.setDate(details.date!);
+                      // Task Widget is used to Display Events in sliding up paanel
+                      // it is assigned to a variable to easily call the widgets locally
                       setState(() {
                         // ignore: prefer_const_constructors
                         _selectedWidget = taskWidget();
@@ -97,6 +101,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           onPressed: () => Navigator.of(context).push(
             MaterialPageRoute(
+              // Navigartion to add event page
               builder: (context) => const AddEvent(),
             ),
           ),
@@ -105,6 +110,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+  // Widget for rendering contents in sliding up panel -----------------------------------------------------------------
   Widget sliderbuild({required ScrollController scrollController}) {
     return Theme(
       data: ThemeData.light(),
@@ -116,8 +122,10 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
+  //End of Widget  ---------------------------------------------------------------------------------------------------
 }
 
+// Event datasource for SF Calender ----------------------------------------------------------------------------------
 class EventdataSource extends CalendarDataSource {
   EventdataSource(List<Event> appoinments) {
     this.appointments = appointments;
@@ -140,3 +148,4 @@ class EventdataSource extends CalendarDataSource {
   @override
   bool isAllDay(int index) => getEvent(index).isAllDay;
 }
+// End of datesource -------------------------------------------------------------------------------------------

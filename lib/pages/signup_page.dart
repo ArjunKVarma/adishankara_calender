@@ -12,27 +12,23 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final FirebaseServices _auth = FirebaseServices();
+
+  // Requirements for form ------------------------------------------------------------------------------------------
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  bool _obscurePassword = true;
-
-  final FocusNode _focusNodeuser = FocusNode();
   final FocusNode _focusNodeEmail = FocusNode();
   final FocusNode _focusNodePassword = FocusNode();
   final FocusNode _focusNodeConfirmPassword = FocusNode();
-
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _userController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _confpassController = TextEditingController();
-
-  String _user = "";
+  bool _obscurePassword = true;
   String _email = "";
   String _password = "";
   bool _signing = false;
+  // End requirements for form -------------------------------------------------------------------------------------
 
+  // signup function ------------------------------------------------------------------------------------------------
   void _handlesignup() async {
-    _user = _userController.text;
     _email = _emailController.text;
     _password = _confpassController.text;
     if (kDebugMode) {
@@ -61,10 +57,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _signing = false;
     });
   }
+  // End signup function ----------------------------------------------------------------------------------------------------
 
   @override
   void dispose() {
-    _userController.dispose();
     _emailController.dispose();
     _passController.dispose();
     _confpassController.dispose();
@@ -92,32 +88,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 35),
-              TextFormField(
-                controller: _userController,
-                focusNode: _focusNodeuser,
-                keyboardType: TextInputType.text,
-                maxLength: 20,
-                decoration: InputDecoration(
-                  labelText: "Username",
-                  prefixIcon: const Icon(Icons.person_2),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter Username.";
-                  } else if ((value.contains('@') || value.contains('.'))) {
-                    return "Invalid Username";
-                  }
-                  return null;
-                },
-                onEditingComplete: () => _focusNodeEmail.requestFocus(),
-              ),
-              const SizedBox(height: 10),
               TextFormField(
                 controller: _emailController,
                 focusNode: _focusNodeEmail,

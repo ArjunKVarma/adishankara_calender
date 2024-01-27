@@ -1,12 +1,10 @@
 import 'package:adishankara_calender/models/meeting_model.dart';
 import 'package:adishankara_calender/providers/event_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:convert';
 
 class AddEvent extends StatefulWidget {
   final Event? event;
@@ -20,11 +18,14 @@ class AddEvent extends StatefulWidget {
 }
 
 class _AddEventState extends State<AddEvent> {
+  // initialising variable for form creation -------------------------------------------------------------------------
   final _formkey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final descController = TextEditingController();
   late DateTime fromDate;
   late DateTime toDate;
+  // End of variable initialisation -----------------------------------------------------------------------------------
+
   @override
   void initState() {
     super.initState();
@@ -68,6 +69,7 @@ class _AddEventState extends State<AddEvent> {
             )),
       ));
 
+  // Contents on display --------------------------------------------------------------------------------------------
   buildTitle() {
     return TextFormField(
       style: const TextStyle(fontSize: 24),
@@ -128,47 +130,6 @@ class _AddEventState extends State<AddEvent> {
           child,
         ],
       );
-
-  Future savevent() async {
-    final isValid = _formkey.currentState!.validate();
-    Color colorARGB = Color.fromARGB(
-      255,
-      math.Random().nextInt(200),
-      math.Random().nextInt(200),
-      math.Random().nextInt(200),
-    );
-
-    if (isValid) {
-      final event = Event(
-          eventName: titleController.text,
-          eventdesc: descController.text,
-          from: fromDate,
-          to: toDate,
-          background: colorARGB,
-          isAllDay: false);
-
-      final provider = Provider.of<EventProvider>(context, listen: false);
-      provider.addEvent(event);
-
-      //code block for adding event to firebase
-      // final eventData = jsonEncode(event) as Map<String, dynamic>;
-      // FirebaseFirestore.instance.collection('events').add(eventData);
-      Map<String, dynamic> eventData = event.toJson();
-      FirebaseFirestore.instance
-          .collection('events')
-          .add(eventData)
-          .then((docRef) {
-        print('Event added with ID: ${docRef.id}');
-      });
-      // End of adding event to firebase
-
-      Navigator.of(context).pop();
-      if (kDebugMode) {
-        print(event.toString());
-      }
-    }
-  }
-
   Widget buildTo() {
     return buildHeader(
       header: "To",
@@ -208,7 +169,42 @@ class _AddEventState extends State<AddEvent> {
     }
     setState(() => fromDate = date);
   }
+  // End of Displayable contents --------------------------------------------------------------------------------------------
 
+  // Function for Saving event to database when save button is pressed ----------------------------
+  Future savevent() async {
+    final isValid = _formkey.currentState!.validate();
+    Color colorARGB = Color.fromARGB(
+      255,
+      math.Random().nextInt(200),
+      math.Random().nextInt(200),
+      math.Random().nextInt(200),
+    );
+
+    if (isValid) {
+      final event = Event(
+          eventName: titleController.text,
+          eventdesc: descController.text,
+          from: fromDate,
+          to: toDate,
+          background: colorARGB,
+          isAllDay: false);
+
+      // Code block for adding event to State managment
+      final provider = Provider.of<EventProvider>(context, listen: false);
+      provider.addEvent(event);
+
+      //code block for adding event to firebase
+      Map<String, dynamic> eventData = event.toJson();
+      FirebaseFirestore.instance.collection('events').add(eventData);
+      // End of adding event to firebase
+
+      Navigator.of(context).pop();
+    }
+  }
+  // End of savefunction ----------------------------------------------------
+
+  // Code block for datepickers ------------------------------------------------------------------------
   Future<DateTime?> pickDateTime(DateTime initDate,
       {required bool pickdate, DateTime? firstDate}) async {
     if (pickdate) {
@@ -244,17 +240,20 @@ class _AddEventState extends State<AddEvent> {
     setState(() => toDate = date);
   }
 }
+// End of datepicker codeblock ----------------------------------------------------------------------------------------
 
+//Utility function to convert Date and time formats
 class Util {
   static String toDate(DateTime dateTime) {
     final date = DateFormat.yMMMEd().format(dateTime);
 
-    return '$date';
+    return date;
   }
 
   static String toTime(DateTime dateTime) {
     final time = DateFormat.Hm().format(dateTime);
 
-    return '$time';
+    return time;
   }
 }
+// End of utility functions

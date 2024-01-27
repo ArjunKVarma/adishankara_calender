@@ -11,6 +11,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 class AscMaterialApp extends StatelessWidget {
   const AscMaterialApp({super.key});
 
+  // Drawer element Libarary used to create the animated menusceen for the app -----------------------------------------------------
   @override
   Widget build(BuildContext context) {
     return ZoomDrawer(
@@ -24,6 +25,7 @@ class AscMaterialApp extends StatelessWidget {
   }
 }
 
+// Drawer element or left side drawer screen of the app--------------------------------------------------------
 class DrawerElement extends StatelessWidget {
   DrawerElement({super.key});
   final String? user = _auth.currentUser!.email;
@@ -36,8 +38,6 @@ class DrawerElement extends StatelessWidget {
           padding:
               EdgeInsets.only(top: MediaQuery.of(context).size.height / 3.2),
           children: [
-            // A GfListTile with a title, a subtitle, and an icon
-
             // A GfListTile with an avatar, a title, a subtitle, and a color
             const GFListTile(
               shadow: BoxShadow(
@@ -65,10 +65,10 @@ class DrawerElement extends StatelessWidget {
               title: Text('Profile'),
               subTitle: Text('under development'),
               icon: Icon(Icons.arrow_forward_ios),
-              color: Color.fromARGB(33, 255, 255, 255),
+              color: Color.fromARGB(5, 255, 255, 255),
             ),
             // A GfListTile with a title, a subtitle, an icon, and an onTap callback
-            GFListTile(
+            const GFListTile(
               shadow: BoxShadow(
                 color: Color.fromARGB(30, 255, 255, 255),
                 offset: Offset.zero,
@@ -83,13 +83,13 @@ class DrawerElement extends StatelessWidget {
               color: Color.fromARGB(33, 255, 255, 255),
             ),
             GFListTile(
-              shadow: BoxShadow(
+              shadow: const BoxShadow(
                 color: Color.fromARGB(30, 255, 255, 255),
                 offset: Offset.zero,
                 blurRadius: 0.0,
                 spreadRadius: 0.0,
               ),
-              title: Text('Signed in as'),
+              title: const Text('Signed in as'),
               subTitle: Text(user!),
               onLongPress: () {
                 _auth.signOut();
@@ -99,10 +99,10 @@ class DrawerElement extends StatelessWidget {
                       builder: (context) => const SignUpScreen(),
                     ));
               },
-              margin: EdgeInsets.all(5),
+              margin: const EdgeInsets.all(5),
               radius: 0,
-              icon: Icon(Icons.logout),
-              color: Color.fromARGB(33, 255, 255, 255),
+              icon: const Icon(Icons.logout),
+              color: const Color.fromARGB(33, 255, 255, 255),
             ),
           ],
         ),
@@ -110,7 +110,9 @@ class DrawerElement extends StatelessWidget {
     );
   }
 }
+// End of drawer element --------------------------------------------------------------------------------------
 
+//Function class created to toggle between mainscreen and menuscreeen
 class ToggleWidget extends StatelessWidget {
   const ToggleWidget({super.key});
   @override
@@ -121,3 +123,4 @@ class ToggleWidget extends StatelessWidget {
     );
   }
 }
+//nd of toggle function------------------------------------------------------------------------------------------
