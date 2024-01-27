@@ -1,9 +1,9 @@
 
 
-### Flutter Calendar App
+# Flutter Calendar App
 
 This Flutter calendar app is designed to help users manage their events and appointments efficiently. It provides a user-friendly interface and a range of features to enhance the calendar experience. The app is built using Flutter, a popular cross-platform framework for developing mobile applications.
-# Note: This app is still in Developmen
+### Note: This app is still in Development
 
 ## Repositories Used
 
