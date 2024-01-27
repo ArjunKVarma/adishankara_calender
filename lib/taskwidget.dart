@@ -83,15 +83,7 @@ class _taskWidgetState extends State<taskWidget> {
               itemCount: filtered1.length,
               itemBuilder: (BuildContext context, index) {
                 return const Center(
-                  child: GFListTile(
-                    title: Text("No events"),
-                    shadow: BoxShadow(
-                      color: Color.fromARGB(167, 255, 255, 255),
-                      offset: Offset.zero,
-                      blurRadius: 0.0,
-                      spreadRadius: 0.0,
-                    ),
-                  ),
+                  child: Text("No events"),
                 );
               },
             ),
@@ -129,6 +121,11 @@ class _taskWidgetState extends State<taskWidget> {
                     itemCount: events.length,
                     itemBuilder: (context, index) {
                       Event event = events[index];
+                      //converts string to date
+                      String fromdate =
+                          DateFormat("yyyy-MM-dd").format(event.from);
+                      String todate = DateFormat("yyyy-MM-dd").format(event.to);
+
                       if (event.from.isAfter(date)) {
                         return GFListTile(
                             shadow: const BoxShadow(
@@ -165,12 +162,14 @@ class _taskWidgetState extends State<taskWidget> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(3),
-                                  child: Text(
-                                    "${event.from} to ${event.to}",
-                                    style:
-                                        const TextStyle(color: Colors.white60),
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(3),
+                                    child: Text(
+                                      "$fromdate to $todate",
+                                      style: const TextStyle(
+                                          color: Colors.white60),
+                                    ),
                                   ),
                                 )
                               ],
