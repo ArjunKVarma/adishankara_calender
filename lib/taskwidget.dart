@@ -118,7 +118,7 @@ class _taskWidgetState extends State<taskWidget> {
                 if (snapshot.hasData) {
                   List<Event> events = snapshot.data!;
                   return ListView.builder(
-                    itemCount: events.length,
+                    itemCount: events.length - 1,
                     itemBuilder: (context, index) {
                       Event event = events[index];
                       //converts string to date
@@ -140,14 +140,16 @@ class _taskWidgetState extends State<taskWidget> {
                                   color: Colors.white60, fontSize: 20),
                             ),
                             onTap: () {
-                              final event = selectedEvents
+                              final event_s = selectedEvents
                                   .where((e) =>
                                       DateFormat.yMMMd().format(e.from) ==
-                                      formattedDate)
+                                          formattedDate &&
+                                      e.eventdesc == event.eventdesc)
                                   .toList();
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => ViewEvent(event: event),
+                                  builder: (context) =>
+                                      ViewEvent(event: event_s),
                                 ),
                               );
                             },
